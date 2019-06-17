@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+//using Microsoft.Extensions.Logging;
+using Contracts;
 
 namespace AccountOwnerServer.Controllers
 {
@@ -11,9 +12,9 @@ namespace AccountOwnerServer.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private ILogger _logger;
+        private ILoggerManager _logger;
 
-        public ValuesController(ILogger logger)
+        public ValuesController(ILoggerManager logger)
         {
             _logger = logger;
         }
@@ -24,9 +25,9 @@ namespace AccountOwnerServer.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            _logger.LogInformation("Here is info message from our values controller");
+            _logger.LogInfo("Here is info message from our values controller");
             _logger.LogDebug("Here is debug message from our values controller");
-            _logger.LogWarning("Here is warn message from our values controller");
+            _logger.LogWarn("Here is warn message from our values controller");
             _logger.LogError("Here is error message from out values controller");
             return new string[] { "value1", "value2" };
         }

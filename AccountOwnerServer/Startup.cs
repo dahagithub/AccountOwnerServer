@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using AccountOwnerServer.Extensions;
+using NLog;
+using System.IO;
 
 namespace AccountOwnerServer
 {
@@ -18,6 +20,7 @@ namespace AccountOwnerServer
     {
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }
 
@@ -26,6 +29,7 @@ namespace AccountOwnerServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureLoggerService();
             services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
