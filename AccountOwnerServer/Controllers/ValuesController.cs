@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 //using Microsoft.Extensions.Logging;
 using Contracts;
+using Entities;
 
 namespace AccountOwnerServer.Controllers
 {
@@ -13,10 +14,12 @@ namespace AccountOwnerServer.Controllers
     public class ValuesController : ControllerBase
     {
         private ILoggerManager _logger;
+        private IRepositoryWrapper _repoWrapper;
 
-        public ValuesController(ILoggerManager logger)
+        public ValuesController(ILoggerManager logger, IRepositoryWrapper repoWrapper)
         {
             _logger = logger;
+            _repoWrapper = repoWrapper;
         }
 
         
@@ -29,6 +32,20 @@ namespace AccountOwnerServer.Controllers
             _logger.LogDebug("Here is debug message from our values controller");
             _logger.LogWarn("Here is warn message from our values controller");
             _logger.LogError("Here is error message from out values controller");
+            var domesticAccounts = _repoWrapper.Account.FindByCondition(x => x.AccountType.Equals("Domestic"));
+            var list = domesticAccounts.ToList();
+            for(int i = 0; i<list.Count; i++)
+            {
+                _logger.LogInfo("i=" + i + " account=" + ObjectDumper.Dump(list[i]));
+            }
+            _logger.LogInfo("Domestic=" + domesticAccounts.ToString());
+            var owners = _repoWrapper.Owner.FindAll();
+            var list2 = owners.ToList();
+            for (int i = 0; i < list2.Count; i++)
+            {
+                _logger.LogInfo("i=" + i + " owner=" + ObjectDumper.Dump(list2[i]));
+            }
+            _logger.LogInfo("owners=" + owners.ToString());
             return new string[] { "value1", "value2" };
         }
 

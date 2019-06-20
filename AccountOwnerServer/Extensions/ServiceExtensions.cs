@@ -6,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Entities;
+using Repository;
+
 
 namespace AccountOwnerServer.Extensions
 {
@@ -33,6 +38,19 @@ namespace AccountOwnerServer.Extensions
             services.AddSingleton<ILoggerManager, LoggerManager>();
         }
 
-    }   
+        public static void ConfigureMySqlContext(this IServiceCollection services, IConfiguration config)
+        {
+            var connectionString = config["mysqlconnection:connectionString"];
+           // var o = new DbContextOptionsBuilder<RepositoryContext>();
+           // var r = o.UseMySql(connectionString);
+            services.AddDbContext<RepositoryContext>(o => o.UseMySql(connectionString));
+        }
 
- }
+        public static void ConfigureRepositoryWrapper(this IServiceCollection services)
+        {
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+        }
+
+    }
+
+}
